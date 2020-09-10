@@ -1,0 +1,18 @@
+mkdir press_to_fp_bal_noise
+cd press_to_fp_bal_noise
+
+mkdir A
+cd A
+mkdir train
+mkdir val
+mkdir test
+
+cd ..
+mkdir B
+cd B
+mkdir train
+mkdir val
+mkdir test
+
+cd ..
+cd ..

@@ -1,0 +1,26 @@
+mkdir press_arrow_to_fp_both
+cd press_arrow_to_fp_both
+
+mkdir A
+cd A
+mkdir train
+mkdir val
+mkdir test
+
+cd ..
+mkdir B_noise
+cd B_noise
+mkdir train
+mkdir val
+mkdir test
+
+cd ..
+mkdir B_noiseless
+cd B_noiseless
+mkdir train
+mkdir val
+mkdir test
+
+
+cd ..
+cd ..

@@ -1,0 +1,25 @@
+
+
+
+#!/bin/bash
+
+#PBS -N jobname
+
+#PBS -l select=1:ncpus=1:ngpus=3:mem=30gb
+
+
+#PBS -j oe
+
+#PBS -l walltime=10:00:00
+
+
+module load lang/cuda  
+module load lang/python/anaconda/pytorch
+
+
+cd /work/ef17148/pytorch-CycleGAN-and-pix2pix
+
+python train.py --dataroot acrc_footprints/databases/jobname --name jobname --model pix2pix --direction AtoB --gpu_ids 0,1,2 --display_id -1 --preprocess crop --crop_size 256 --checkpoints_dir acrc_footprints/checkpoints --lambda_L1 1000 
+
+
+
