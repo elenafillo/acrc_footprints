@@ -4,6 +4,18 @@ This repo contains the necessary files to generate usable datasets and train and
 
 The repo is particularly oriented to be used in bluepebble (see the [step by step guide](step-by-step.md)). It requires Python 3, Pytorch, CPU or NVIDIA GPU + CUDA (all these already available in bluepebble).
 
+**To Do**
+- [x] Merge all data_generation files into one and add main arguments
+- [ ] Add secondary arguments 
+    - [ ] Different cut sizes for input and output
+    - [ ] More input options 
+- [ ] Add sample databases, checkpoints and results
+- [ ] Develop, improve and add arguments to loss plotting and results plotting scripts
+    - [ ]  Include updates in step_by_step 
+- [ ] Add new document with
+    - [ ] Summary of tested models
+    - [ ] Suggestions to go forward
+
 # Installation
 Clone this repo 
 ```
