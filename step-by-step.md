@@ -1,15 +1,44 @@
 # Step by step
 
 #### Data Generation
-The scripts in this folder produce the required datasets for pix2pix.
-For now, all functionalities are to be edited within the script.
-*To Do: Merge scripts into one with multiple functionalities, add arguments, develop input formats*
-- gen_data_balanced produces a dataset where the wind directions are balanced according to a ratio specified within script. If there are not enough samples for a direction in a certain month to fulfill the ratio, that month will have less samples than specified. The input format (eg wind, pressure) can be modified, the output is the footprint with the reference red dot.
+TThe script `generate_data.py` in this folder produces the required datasets for pix2pix. It requires the pyhton module to run. It is executed by running the following command (see optional flags below):
+```
+python -W ignore generate_data.py --dataroot new_set 
+```
+The script takes the metereological and footprint .nc files (located within bluepebble, for a different location the code should be changed), prepares the output and input according to the flags and saves it to an output folder. The script can function in three ways:
+- Input to footprint (default): input is prepared according to flags, and the output is the footprint
+- Input to footprint (noiseless): input is prepared according to flags, and the output is the points of highest concentration of the footprint (noise has been removed). Activated with the flag `--noiseless`
+- Simultaneous: input is prepared according to flags, and both the default and the noiseless footprints are returned to parallel folders within the output folder. Activated with the flag `--simultaneous`.
 
-- gen_data_noiseless produces the same dataset as above, only the footprint in the output shows only the higher concentration areas (all points below 4*average are removed)
-- gen_data_simultaneous combines both scripts above - produces one set of inputs and two sets of outputs, one with noise and one without noise
+###### Output folder
+The output folder should contain two folders inside (A and B, or A, B_noise and B_noiseless in the simultaneous one) each with train, test and val folders inside. Changing the folder name in the `create_directories.txt` (or the `create_simultaneous_directories.txt`) , then executing them with `bash create_directories.txt`, creates the necessary folders and subfolders.
 
-The scripts output the images, of approximately the selected size, to an specified folder, that should contain two folders inside (A and B, or A, B_noise and B_noiseless in the simultaneous one) each with train, test and val folders inside. Changing the folder name in the `create_directories.txt` (or the `create_simultaneous directories.txt`) , then executing them with `bash create_directories.txt`, creates the necessary folders and subfolders.
+###### Balance in the dataset
+The `--ratios` flag allows the user to control the balance of the dataset with respect to wind direction at the release point by specifying a given ratio for each direction (north, east, south, west), adding up to one. For example, a perfectly balanced dataset would be inputted via `--ratios 0.25 0.25 0.25 0.25`, and a dataset containing only west-directed samples would be achieved with  `--ratios 0 0 0 1`. The script aims to get as close as possible to the desired ratio, but in cases where the original distribution of directions in the data is very uneven, it will not be successful and will return less samples than expected. For example, aiming for a completely balanced dataset where the data has barely any east samples will result in the correct number of north, west and south samples but few east samples. 
+
+###### Sizing
+The input data is cropped to a square around the release point of size (size_cut, size_cut), inputted with the flag `--size_cut`. This is the equivalent of "zooming in" the full image. Make sure that size_cut is less than half the height and the width.
+
+The cropped image is outputted with approximately the pixel size specified by `--cut_output`. Choosing a value close to that accepted by the preferred generator architecture will work best. For example, unet256 (the default architecture in pix2pix) supports images whose width and height in pixels are multiples of 256. Due to the nature of matplotlib, used to save images, the exact `--cut_output` size cannot be achieved, so an image slightly above that size is returned and cut to the correct size during training. 
+
+###### Script options
+This is the role of some relevant flags that allow input and output customisation:
+Flag | Role
+------------ | -------------
+`--dataroot` | folder to save the generated data in. Must have been created before running the program, using `bash create_directories.txt` (or `bash create_simultaneous_directories.txt` if the `--simultaneous` flag is used.)
+`--simultaneous`| Activates the simultaneous mode, where both the default and noiseless footprints are returned.
+`--noiseless`| Returns noiseless footprints instead of default.
+`--ntrain` | Number of train samples to generate (may not be completed depending on the ratios and the nature of the data). int, default = 600.
+`--ntest` | Number of test samples to generate (may not be completed depending on the ratios and the nature of the data). int, default = 100.
+`--nval` | Number of val samples to generate (may not be completed depending on the ratios and the nature of the data). int, default = 100.
+`--size_cut`| Size to cut datafile to, centered around release point. See Sizing. int, default = 64.
+`--size_output`| Approx size of output figure. Allowed sizes depend on generator architecture. See Sizing. int, default = 256
+`--ratios`| Ratio of wind direction samples in dataset. Must be four numbers adding up to one. four floats, default = 0.2 0.2 0.3 0.3
+`--wind_speed`| Input plot - contoured plot of wind speed (51 levels)
+`--wind_direction`| Input plot - quiver plot of wind direction 
+`--sea_level_pressure`| Input plot - coloured plot of pressure (5 levels)
+`--direction_at_release`| Input plot - arrow in the direction of the windspeed at the release point, length dependent on speed.
+`--size_red_dot`| Size of the red dot located at the release point. int, default = 10, a value of 0 means no red dot is drawn.
 
 #### Databases
 Once the data is generated, it is combined so it is usable by pix2pix. This is done using 

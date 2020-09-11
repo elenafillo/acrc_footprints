@@ -36,23 +36,24 @@ group.add_argument('--noiseless', action = 'store_true', help = 'output footprin
 parser.add_argument('--ntrain', type=int, default = 600, help = 'number of train samples (may not be completed depending on ratios)')
 parser.add_argument('--ntest', type=int, default = 100, help = 'number of test samples (may not be completed depending on ratios)')
 parser.add_argument('--nval', type=int, default = 100, help = 'number of val samples (may not be completed depending on ratios)')
-parser.add_argument('--size', type=int, default = 256, help = 'Approx size to cut file to, centered around release point. Allowed sizes depend on architecture but are not checked! Please check before running')
+parser.add_argument('--size_cut', type=int, default = 64, help = 'Size to cut file to, centered around release point.')
+parser.add_argument('--size_output', type=int, default = 256, help = 'Approx size of output figure. Allowed sizes depend on architecture but are not checked! Please check before running')
 parser.add_argument("--ratios", nargs=4, metavar=('north', 'east', 'south', 'west'), help="Ratio of wind directions in datasets. Must be floats adding up to one", type=float, default=[0.2, 0.2, 0.3, 0.3])
 parser.add_argument("--wind_speed", action = 'store_true', help = 'coloured contour plot of wind speed (51 levels)')
 parser.add_argument("--wind_direction", action = 'store_true', help = 'quiver plot of wind direction')
 parser.add_argument("--sea_level_pressure", action = 'store_true', help = 'coloured contour plot of pressure (5 levels)')
 parser.add_argument("--direction_at_release", action = 'store_true', help = 'add arrow in the direction of the windspeed at the release point')
-parser.add_argument("--size_red_dot", type = int, default = 10, help = 'size of red dot at release point (size 0 means no dot - needs testing)')
+parser.add_argument("--size_red_dot", type = int, default = 10, help = 'size of red dot at release point (size 0 means no dot')
 
-
+args = parser.parse_args()
 
 
 # retrieve the met and footprints data 
 path_x = "/work/al18242/ML_summer_2020/EUROPE_Met_slp_" # path to metfiles
 path_y = "/work/al18242/ML_summer_2020/MHD-10magl_EUROPE_" #path to footprints
 filenames = [201801 + i for i in range(12)] # create list of paths to each file
-filenames_x = path_x + filenames
-filenames_y = path_y + filenames 
+filenames_x = [path_x + str(filen) + '.nc' for filen in filenames]
+filenames_y = [path_y + str(filen) + '.nc' for filen in filenames] 
 met_data = xr.open_mfdataset(filenames_x, combine="by_coords") # open all met and fp data combined 
 fp_data = xr.open_mfdataset(filenames_y, combine="by_coords")
 
@@ -60,13 +61,13 @@ fp_data = xr.open_mfdataset(filenames_y, combine="by_coords")
 
 
 # prepare the storing paths
-pathA = {"train" : args.dataroot + "A/train/", "test" : args.dataroot + "A/test/", "val" : args.dataroot + "A/val/"}
-if simultaneous == True:
+pathA = {"train" : args.dataroot + "/A/train/", "test" : args.dataroot + "/A/test/", "val" : args.dataroot + "/A/val/"}
+if args.simultaneous == True:
     # if simultaneous, path B contains B_noise
-    pathB= {"train" : args.dataroot + "B_noise/train/", "test" : args.dataroot + "B_noise/test/", "val" : args.dataroot + "B_noise/val/"}
-    pathB_noiseless = {"train" : args.dataroot + "B_noiseless/train/", "test" : args.dataroot + "B_noiseless/test/", "val" : args.dataroot + "B_noiseless/val/"}
+    pathB= {"train" : args.dataroot + "/B_noise/train/", "test" : args.dataroot + "/B_noise/test/", "val" : args.dataroot + "/B_noise/val/"}
+    pathB_noiseless = {"train" : args.dataroot + "/B_noiseless/train/", "test" : args.dataroot + "/B_noiseless/test/", "val" : args.dataroot + "/B_noiseless/val/"}
 else:
-    pathB = {"train" : args.dataroot + "Btrain/", "test" : args.dataroot + "B/test/", "val" : args.dataroot + "B/val/"}
+    pathB = {"train" : args.dataroot + "/B/train/", "test" : args.dataroot + "/B/test/", "val" : args.dataroot + "/B/val/"}
 
 
 # number of samples in each folder 
@@ -119,22 +120,22 @@ for mode in ["train", "test", "val"]:
                    
             release_lon_fp = min(fp_data.lon.values, key=lambda x:abs(x-fp_data.release_lon[0]))
             # find the index of these datapoints and determine boundaries
-            lat_bound =[int(np.where(fp_o.lat.values == release_lat)[0][0]-size/2), int(np.where(fp_o.lat.values == release_lat)[0][0]+size/2)]
-            lon_bound =[int(np.where(fp_o.lon.values == release_lon_fp)[0][0]-size/2), int(np.where(fp_o.lon.values == release_lon_fp)[0][0]+size/2)]
+            lat_bound =[int(np.where(fp_o.lat.values == release_lat)[0][0]-args.size_cut/2), int(np.where(fp_o.lat.values == release_lat)[0][0]+args.size_cut/2)]
+            lon_bound =[int(np.where(fp_o.lon.values == release_lon_fp)[0][0]-args.size_cut/2), int(np.where(fp_o.lon.values == release_lon_fp)[0][0]+args.size_cut/2)]
 
             # check if boundaries are outside of image size
             if lat_bound[0] < 0:
                 lat_bound[0] = 0
-                lat_bound[1] = size - 1
+                lat_bound[1] = arg.size_cut - 1
             if lat_bound[1] >= fp_o.values.shape[0]:
                 lat_bound[1] = fp_o.values.shape[0] - 1
-                lat_bound[0] = fp_o.values.shape[0] - 1 - size
+                lat_bound[0] = fp_o.values.shape[0] - 1 - args.size_cut
             if lon_bound[0] < 0:
                 lon_bound[0] = 0
-                lon_bound[1] = size -1
+                lon_bound[1] = args.size -1
             if lon_bound[1] >= fp_o.values.shape[1]:
                 lon_bound[1] = fp_o.values.shape[1] - 1
-                lon_bound[0] = fp_o.values.shape[1] - 1 - size
+                lon_bound[0] = fp_o.values.shape[1] - 1 - args.size_cut
 
             print(lat_bound, lon_bound)
             # change to true so boundaries are not recalculated
@@ -172,7 +173,7 @@ for mode in ["train", "test", "val"]:
                 lon = slice(fp_o.lon.values[lon_bound[0]], fp_o.lon.values[lon_bound[1]]))
             vals = fp.values
             LON, LAT = np.meshgrid(fp.lon, fp.lat)
-            fig, ax = plt.subplots(figsize=(size/100, size/100), dpi=166)
+            fig, ax = plt.subplots(figsize=(args.size_output/100, args.size_output/100), dpi=166)
             
             if args.simultaneous == False and args.noiseless == True:
                 vals[vals< 4*np.mean(vals)] = 0 #saves only noiseless one
@@ -184,7 +185,7 @@ for mode in ["train", "test", "val"]:
 
             if args.simultaneous == True:
                 vals[vals< 4*np.mean(vals)] = 0 #saves noiseless one as well
-                fig, ax = plt.subplots(figsize=(size/100, size/100), dpi=166)
+                fig, ax = plt.subplots(figsize=(args.size_output/100, args.size_output/100), dpi=166)
                 ax.contourf(LON, LAT, np.log10(vals),levels=51)
                 ax.scatter(fp_data.release_lon[0], fp_data.release_lat[0], color="red", s=args.size_red_dot)
                 ax.axis('off')
@@ -193,7 +194,7 @@ for mode in ["train", "test", "val"]:
             print("     saving met file ", str(time)[:13],".jpg")
             # create meteorological image and save
             LON, LAT = np.meshgrid(met_data_cut.lon, met_data_cut.lat)
-            fig, ax = plt.subplots(figsize=(size/100, size/100), dpi=166)
+            fig, ax = plt.subplots(figsize=(args.size_output/100, args.size_output/100), dpi=166)
             
             if args.wind_speed == True:
                 wind_to_plot = met_data_cut["Wind_Speed"]
@@ -217,7 +218,7 @@ for mode in ["train", "test", "val"]:
 
         s = s + 1
         
-        if s == round(0.8*len(timestamps)):
-            print("80% of timestamps checked, could not fullfil ratio. Images still needed:", to_save_samples)
+        if s == round(0.9*len(timestamps)):
+            print("90% of timestamps checked, could not fullfil ratio. Images still needed:", to_save_samples)
             for direction in to_save_samples.keys():
                 to_save_samples[direction] = 0
