@@ -39,6 +39,7 @@ This repo contains the following:
 - checkpoints: checkpoints of previously trained models (trained on the sample databases), plus a plotting tool to visualise the loss graphs.
 - results: the results of previously trained models (trained on the sample databases), plus a plotting tool to visualise and compare the results.
 
+All folders and steps are described in the [step by step guide](step-by-step.md).
 # Some notes on the pix2pix algorithm
 See their [paper](https://arxiv.org/pdf/1611.07004.pdf) for some information.
 #### Loss function
