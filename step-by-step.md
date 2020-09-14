@@ -70,6 +70,9 @@ Flag | Role
 
 See the pix2pix [options file](https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix/tree/master/options) for other base, training and testing options.
 
+## Note on sizes:
+Using the flag `--preprocess crop` during training means the input image is randomly cut to a square of size `--crop_size` (during testing, images of any size can be passed). The red dot has the function of indicating the position of the release point, rather than passing correctly-sized images where the release point would always be centered. This way, it is likely that the trained network can produce footprints for any release location and not only the centre (needs more testing). 
+
 ##### Visualising the results
 As pix2pix trains, it saves an example at each epoch to track development. All finished epochs can be accessed in the `checkpoints/jobname/web`folder. It is recomended that the whole folder is scp'd to the local computer and the html opened in a standard browser. (Note: it is recommended that before opening the html file in the local machine, it is edited to remove `http-equiv="refresh"` from line five. This command makes the html refresh every few seconds, which is not useful if it has been scp'd).
 The loss plots can be visualised using the `plot_loss.py` file (functional but needs developing)
@@ -88,6 +91,8 @@ Flag | Role
 ------------ | -------------
 `--name`|  Name of the job. pix2pix will use the checkpoints stored in the folder under the jobname, and will return the results to a new folder under the same name.
 `--num_test` | Number of samples to test from the test folder under name. Default is 50. If num_test is bigger than the number of pictures in the folder, it just tests them all.
+`--netG` | Same generator architecture as used in training
+
 
 Note that pictures need to have a certain size during training (square, with a size determined by the network architecture), but they do not need this during testing. Thus, images bigger than the specified size during training / different ratio etc can be passed.
 
