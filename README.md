@@ -10,11 +10,13 @@ The repo is particularly oriented to be used in bluepebble (see the [step by ste
     - [ ] Different cut sizes for input and output
     - [ ] More input options 
 - [ ] Add sample databases, checkpoints and results
+    - [x] Add sample databases
+    - [ ] Add sample checkpoints and results
 - [ ] Develop, improve and add arguments to loss plotting and results plotting scripts
     - [ ]  Include updates in step_by_step 
-- [ ] Add new document with
-    - [ ] Summary of tested models
-    - [ ] Suggestions to go forward
+- [x] Add new document with
+    - [x] Summary of tested models
+    - [x] Suggestions to go forward
 
 # Installation
 Clone this repo 
