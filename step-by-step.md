@@ -70,12 +70,16 @@ Flag | Role
 
 See the pix2pix [options file](https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix/tree/master/options) for other base, training and testing options.
 
-## Note on sizes:
+#### Note on sizes:
 Using the flag `--preprocess crop` during training means the input image is randomly cut to a square of size `--crop_size` (during testing, images of any size can be passed). The red dot has the function of indicating the position of the release point, rather than passing correctly-sized images where the release point would always be centered. This way, it is likely that the trained network can produce footprints for any release location and not only the centre (needs more testing). 
 
 ##### Visualising the results
 As pix2pix trains, it saves an example at each epoch to track development. All finished epochs can be accessed in the `checkpoints/jobname/web`folder. It is recomended that the whole folder is scp'd to the local computer and the html opened in a standard browser. (Note: it is recommended that before opening the html file in the local machine, it is edited to remove `http-equiv="refresh"` from line five. This command makes the html refresh every few seconds, which is not useful if it has been scp'd).
-The loss plots can be visualised using the `plot_loss.py` file (functional but needs developing)
+The loss plots can be visualised using the `plot_loss.py` file, running
+```
+python plot_loss.py --name jobname
+```
+It requires the python module.
 
 **Training in bluepebble**
 pix2pix requires a high amount of memory (depending on  the size of the dataset, more fine-tuning needed) and about 2.5 hours to run, depending on the size of the dataset. See [the sample pbs file](pix2pix_gpu_sample.pbs).
