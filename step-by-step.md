@@ -46,7 +46,12 @@ Once the data is generated, it is combined so it is usable by pix2pix. This is d
 python /path/pytorch-CycleGAN-and-pix2pix/datasets/combine_A_and_B.py --fold_A data_generation/new_set/A --fold_B data_generation/new_set/B --fold_AB databases/new_set
 ```
 It requires the Python module.
-*To do: add sample databases*
+
+To download one of the sample databases, do 
+```
+bash download_dataset.sh datasetname
+```
+See (the summary) for the sample datasets available.
 
 ## Training
 Training and testing require the pytorch module, and if you want to use GPU to run it, then the cuda module, added with `module load lang/cuda`. 
