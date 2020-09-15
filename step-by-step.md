@@ -79,11 +79,7 @@ See the pix2pix [options file](https://github.com/junyanz/pytorch-CycleGAN-and-p
 Using the flag `--preprocess crop` during training means the input image is randomly cut to a square of size `--crop_size` (during testing, images of any size can be passed). The red dot has the function of indicating the position of the release point, rather than passing correctly-sized images where the release point would always be centered. This way, it is likely that the trained network can produce footprints for any release location and not only the centre (needs more testing). 
 
 #### Sample checkpoints
-To download one of the sample checkpoint files, copy all them from bluepebble using 
-```
-cp -r /work/ef17148/acrc_footprints_samples/sample_checkpoints checkpoints
-```
-It will take a while to copy, but it only needs to be done once. When completed, you can unzip a particular checkpoints file with
+To download one of the sample checkpoint files, use
 ```
 bash download_checkpoints.sh jobname
 ```
@@ -116,11 +112,7 @@ Flag | Role
 
 Note that pictures need to have a certain size during training (square, with a size determined by the network architecture), but they do not need this during testing. Thus, images bigger than the specified size during training / different ratio etc can be passed.
 #### Sample results
-To download one of the sample result files, copy all them from bluepebble using 
-```
-cp -r /work/ef17148/acrc_footprints_samples/sample_results results
-```
-It will take a while to copy, but it only needs to be done once. When completed, you can unzip a particular results dataset with
+To download one of the sample result files, use
 ```
 bash download_dataset.sh jobname
 ```
