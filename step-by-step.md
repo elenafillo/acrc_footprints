@@ -47,11 +47,11 @@ python /path/pytorch-CycleGAN-and-pix2pix/datasets/combine_A_and_B.py --fold_A d
 ```
 It requires the Python module.
 
-To download one of the sample databases, do 
+To download one of the sample databases, do
 ```
 bash download_dataset.sh datasetname
 ```
-See (the summary) for the sample datasets available.
+See (the summary)[summary_and_future_steps.md] for the sample datasets available.
 
 ## Training
 Training and testing require the pytorch module, and if you want to use GPU to run it, then the cuda module, added with `module load lang/cuda`. 
@@ -78,7 +78,18 @@ See the pix2pix [options file](https://github.com/junyanz/pytorch-CycleGAN-and-p
 #### Note on sizes:
 Using the flag `--preprocess crop` during training means the input image is randomly cut to a square of size `--crop_size` (during testing, images of any size can be passed). The red dot has the function of indicating the position of the release point, rather than passing correctly-sized images where the release point would always be centered. This way, it is likely that the trained network can produce footprints for any release location and not only the centre (needs more testing). 
 
-##### Visualising the results
+#### Sample checkpoints
+To download one of the sample checkpoint files, copy all them from bluepebble using 
+```
+cp -r /work/ef17148/acrc_footprints_samples/sample_checkpoints checkpoints
+```
+It will take a while to copy, but it only needs to be done once. When completed, you can unzip a particular checkpoints file with
+```
+bash download_checkpoints.sh jobname
+```
+See (the summary)[summary_and_future_steps.md] for the sample datasets available.
+
+#### Visualising the results
 As pix2pix trains, it saves an example at each epoch to track development. All finished epochs can be accessed in the `checkpoints/jobname/web`folder. It is recomended that the whole folder is scp'd to the local computer and the html opened in a standard browser. (Note: it is recommended that before opening the html file in the local machine, it is edited to remove `http-equiv="refresh"` from line five. This command makes the html refresh every few seconds, which is not useful if it has been scp'd).
 The loss plots can be visualised using the `plot_loss.py` file, running
 ```
@@ -104,8 +115,18 @@ Flag | Role
 
 
 Note that pictures need to have a certain size during training (square, with a size determined by the network architecture), but they do not need this during testing. Thus, images bigger than the specified size during training / different ratio etc can be passed.
+#### Sample results
+To download one of the sample result files, copy all them from bluepebble using 
+```
+cp -r /work/ef17148/acrc_footprints_samples/sample_results results
+```
+It will take a while to copy, but it only needs to be done once. When completed, you can unzip a particular results dataset with
+```
+bash download_dataset.sh jobname
+```
+See (the summary)[summary_and_future_steps.md] for the sample datasets available.
 
-##### Visualising the results
+#### Visualising the results
 Once the testing is done, you can visualise the results by visualising `index.html`in the folder `results/jobname/test_latest`. It is recomended that the whole folder is scp'd to the local computer and the html opened in a standard browser.
 
 The results can be evaluated and plotted using the `compare_results.py` file (functional but needs developing).
