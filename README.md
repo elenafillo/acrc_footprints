@@ -11,7 +11,7 @@ The repo is particularly oriented to be used in bluepebble (see the [step by ste
     - [ ] More input options 
 - [ ] Add sample databases, checkpoints and results
     - [x] Add sample databases
-    - [ ] Add sample checkpoints and results
+    - [x] Add sample checkpoints and results
 - [ ] Develop, improve and add arguments to loss plotting and results plotting scripts
     - [ ]  Include updates in step_by_step 
 - [x] Add new document with
