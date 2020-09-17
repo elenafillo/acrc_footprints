@@ -38,7 +38,7 @@ def calculate_sal(fake, real):
         return ndimage.measurements.center_of_mass(R)
     
     # d is the largest distance of two gridpoints in domain -i.e. the diagonal
-    d = math.sqrt(2*(np.shape(real)**2))
+    d = math.sqrt(2*(np.shape(real)[0]**2))
     LOC = math.sqrt((x(fake)[0] - x(real)[0])**2 + (x(fake)[1] - x(real)[1])**2)/d
     
     # STRUCTURE compares the volume of the normalized objects
@@ -84,8 +84,8 @@ for job in args.jobname:
         results[n,0] = S
         results[n,1] = A
         results[n,2] = L
-        
-    fig_hist, (axS, axA, axL) = plt.subplots(1,3, figsize(15,20))
+        n = n + 1
+    fig_hist, (axS, axA, axL) = plt.subplots(1,3, figsize=(15,20))
     axS.hist(results[:,0], 15)
     axA.hist(results[:,1], 15)
     axL.hist(results[:,2], 15)
@@ -93,8 +93,13 @@ for job in args.jobname:
     axS.set_title("S")
     axA.set_title("A")
     axL.set_title("L")
+    axS.axvline(0, c = 'r')
+    axA.axvline(0, c = 'r')
+    axL.axvline(0, c = 'r')
     fig_hist.suptitle("Histograms of SAL values for" + job)
-# do histogram for all samples?
-# identify images with highest lowest and check
- 
- 
+    print("Average for dataset:")
+    print("S - mean", np.mean(results[:,0]), "stdev", np.std(results[:,0]))
+    print("A - mean", np.mean(results[:,1]), "stdev", np.std(results[:,1]))
+    print("L - mean", np.mean(results[:,2]), "stdev", np.std(results[:,2]))
+
+plt.show()
