@@ -34,6 +34,16 @@ pip install -r utils/requirements_bluepebble.txt
 ```
 This avoid overlaps with the modules already installed in the bluepebble system.
 
+The scripts will work with any Python 3.7 module or above. You can load them on bluepebble using
+```
+module load lang/python/anaconda/3.7-2019.10
+```
+Similarly, you can load the pytorch module using
+```
+module load lang/python/anaconda/pytorch
+```
+Only one of them can be activated at a given time, so you might need to load one or the other depending on the stage.
+
 # Contents
 This repo contains the following:
 - data_generation: scripts on how to produce appropriate datasets
