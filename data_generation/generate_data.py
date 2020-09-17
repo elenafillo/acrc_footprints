@@ -91,7 +91,7 @@ for mode in ["train", "test", "val"]:
     # randomly order all the possible timestamps
     timestamps = random.sample(range(0, len(met_data.time.values)), len(met_data.time.values))
 
-    
+    # the number of samples needed for each direction is given by number of samples needed * ratio for a direction
     to_save_samples = {orientation:num*nsamples[mode] for orientation, num in ratios.items()}
     print(to_save_samples)
     s = 0
@@ -99,7 +99,6 @@ for mode in ["train", "test", "val"]:
     orientantion required, it is saved, otherwise s moves up to try the next timestamp. this stops when there are enough samples. 
     """
     # for each datapoint
-
     while np.any(np.array(list(to_save_samples.values()))>0):
         print("mode", mode, "item", s)
         print(to_save_samples)
@@ -164,9 +163,6 @@ for mode in ["train", "test", "val"]:
         
         
         if save == True:
-        
-
-
             print("     saving footprint file ", str(time)[:13],".jpg")
             # create footprint image and save
             fp = fp_data.fp.sel(time = time, lat = slice(fp_o.lat.values[lat_bound[0]], fp_o.lat.values[lat_bound[1]]),
