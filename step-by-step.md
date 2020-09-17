@@ -51,7 +51,7 @@ To download one of the sample databases, do
 ```
 bash download_dataset.sh datasetname
 ```
-See (the summary)[summary_and_future_steps.md] for the sample datasets available.
+See [the summary](summary_and_future_steps.md) for the sample datasets available.
 
 ## Training
 Training and testing require the pytorch module, and if you want to use GPU to run it, then the cuda module, added with `module load lang/cuda`. 
@@ -83,7 +83,7 @@ To download one of the sample checkpoint files, use
 ```
 bash download_checkpoints.sh jobname
 ```
-See (the summary)[summary_and_future_steps.md] for the sample datasets available.
+See [the summary](summary_and_future_steps.md) for the sample datasets available.
 
 #### Visualising the results
 As pix2pix trains, it saves an example at each epoch to track development. All finished epochs can be accessed in the `checkpoints/jobname/web`folder. It is recomended that the whole folder is scp'd to the local computer and the html opened in a standard browser. (Note: it is recommended that before opening the html file in the local machine, it is edited to remove `http-equiv="refresh"` from line five. This command makes the html refresh every few seconds, which is not useful if it has been scp'd).
@@ -116,7 +116,7 @@ To download one of the sample result files, use
 ```
 bash download_dataset.sh jobname
 ```
-See (the summary)[summary_and_future_steps.md] for the sample datasets available.
+See [the summary](summary_and_future_steps.md) for the sample datasets available.
 
 #### Visualising the results
 Once the testing is done, you can visualise the results by visualising `index.html`in the folder `results/jobname/test_latest`. It is recomended that the whole folder is scp'd to the local computer and the html opened in a standard browser.
@@ -126,3 +126,15 @@ The results can be evaluated and plotted using the `plot_results.py`file (functi
 python -W ignore plot_results.py --jobname JOBNAME(S)
 ```
 A single jobname will return a graph of the sum of the predicted footprint vs the real footprint, whereas multiple jobnames will return the above for each plus a comparative graph of the mean error and the correctly guessed pixels. It is roughly orientative (and badly coded), and a better error measure like SAL should be developed.
+
+The results can also be evaluated using the [SAL measure](https://journals.ametsoc.org/mwr/article/136/11/4470/68138/SAL-A-Novel-Quality-Measure-for-the-Verification), which originally evaluates how accurate a rainfall prediction is compared to the actual event. It is used here to evaluate the accuracy of the predicted footprint, returning three key markers as follow:
+- **Structure S**: compares the volume of the normalised objects. It is assumed in this use that there's only one object present in each frame. It can take values in the [-2, 2] range where 0 is a perfect forecast, positive values indicate an overestimation of the spread and negative values appear for too small or too peaked objects.
+- **Amplitude A**: provides a simple measure of the quantitative accuracy of the total amount of concentration in the frame, ignoring the subregional structure. It can take values in the [-2, 2] range, where 0 is a perfect forecast, positive values indicate an overestimation and viceversa.
+- **Location L**: measures the normalised distance between the center of mass of the modeled and observed fields. It can take values in the [0,1] range where 0 is a perfect overlap and 1 is the maximum possible distance in the frame.
+Please refer to the [SAL paper](https://journals.ametsoc.org/mwr/article/136/11/4470/68138/SAL-A-Novel-Quality-Measure-for-the-Verification) for further clarification.
+
+The script can be executed using
+```
+python -W ignore SAL_analysis.py --jobname JOBNAME(S)
+```
+For each jobname introduced (separated by spaces), the script calculates the SAL measure for every image and returns the average while plotting a histogram of each component.
