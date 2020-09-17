@@ -1,6 +1,6 @@
 # acrc_footprints
 The goal of this project is to develop an image-to-image translation solution to predict the shape of plumes based on metereological inputs.
-This repo contains the necessary files to generate usable datasets and train and test them on the pix2pix model developed by junyanz (https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix). 
+This repo contains the necessary files to generate usable datasets and train and test them on the pix2pix model developed by junyanz (https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix). The repo also contains scripts to test the accuracy of the results (see the SAL section in the [step by step guide](step-by-step.md)).
 
 The repo is particularly oriented to be used in bluepebble (see the [step by step guide](step-by-step.md)). It requires Python 3, Pytorch, CPU or NVIDIA GPU + CUDA (all these already available in bluepebble).
 
@@ -9,11 +9,12 @@ The repo is particularly oriented to be used in bluepebble (see the [step by ste
 - [ ] Add secondary arguments 
     - [ ] Different cut sizes for input and output
     - [ ] More input options 
-- [ ] Add sample databases, checkpoints and results
+- [x] Add sample databases, checkpoints and results
     - [x] Add sample databases
     - [x] Add sample checkpoints and results
-- [ ] Develop, improve and add arguments to loss plotting and results plotting scripts
-    - [ ]  Include updates in step_by_step 
+- [x] Develop, improve and add arguments to loss plotting and results plotting scripts
+    - [x]  Include updates in step_by_step
+	- [x]  Added SAL evaluation script
 - [x] Add new document with
     - [x] Summary of tested models
     - [x] Suggestions to go forward
