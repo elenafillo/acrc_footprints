@@ -121,4 +121,8 @@ See (the summary)[summary_and_future_steps.md] for the sample datasets available
 #### Visualising the results
 Once the testing is done, you can visualise the results by visualising `index.html`in the folder `results/jobname/test_latest`. It is recomended that the whole folder is scp'd to the local computer and the html opened in a standard browser.
 
-The results can be evaluated and plotted using the `compare_results.py` file (functional but needs developing).
+The results can be evaluated and plotted using the `plot_results.py`file (functional but needs developing). It can be executed using
+```
+python -W ignore plot_results.py --jobname JOBNAME(S)
+```
+A single jobname will return a graph of the sum of the predicted footprint vs the real footprint, whereas multiple jobnames will return the above for each plus a comparative graph of the mean error and the correctly guessed pixels. It is roughly orientative (and badly coded), and a better error measure like SAL should be developed.
